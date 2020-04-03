@@ -32,6 +32,10 @@ public class FileGraphTest {
         );
         Collections.sort(expectedFiles);
 
+        List<String> expectedInclusions = Collections.singletonList(
+                "inc_1::build/resources/test/testCase1/aaa/start.cpp"
+        );
+
         FileGraph graph = new FileGraph();
         graph.addFile(file);
 
@@ -44,9 +48,13 @@ public class FileGraphTest {
         List<String> resultFiles = graph.getFilesContains("Line from start.cpp");
         Collections.sort(resultFiles);
 
+        List<String> resultInclusions = graph.getInclusions("build/resources/test/testCase1/include.cpp");
+        Collections.sort(resultInclusions);
+
         assertEquals(expectedRows, resultLines);
         assertEquals(expectedInvalidLinks, resultInvalidLinks);
         assertEquals(expectedFiles, resultFiles);
+        assertEquals(expectedInclusions, resultInclusions);
     }
 
     @Test

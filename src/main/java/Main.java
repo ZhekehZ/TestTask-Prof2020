@@ -15,7 +15,7 @@ public class Main {
         toCommand.put(":files", Command.GET_FILES_CONTAINS);
         toCommand.put(":lines", Command.GET_LIST_OF_LINES);
         toCommand.put(":inv", Command.GET_INVALID_LINKS);
-
+        toCommand.put(":inc", Command.INCLUSIONS);
     }
 
     private static String formatInvalidLinks(String link) {
@@ -70,7 +70,7 @@ public class Main {
                 case GET_FILES_CONTAINS:
                     if (args.length == 1) {
                         printHelp();
-                        continue;
+                        break;
                     }
                     graph.getFilesContains(args[1]).forEach(System.out::println);
                     break;
@@ -81,6 +81,14 @@ public class Main {
                 case GET_LIST_OF_LINES:
                     System.out.println("Known lines:");
                     graph.getSimpleRows().forEach(System.out::println);
+                    break;
+                case INCLUSIONS:
+                    if (args.length == 1) {
+                        printHelp();
+                        break;
+                    }
+                    System.out.println("Inclusions:");
+                    graph.getInclusions(args[1]).forEach(System.out::println);
                     break;
                 case ERROR:
                     printHelp();
@@ -110,6 +118,7 @@ public class Main {
         GET_FILES_CONTAINS(" [LINE]   - get list of files containing LINE"),
         GET_INVALID_LINKS("          - get list of invalid links"),
         GET_LIST_OF_LINES("          - get all simple rows"),
+        INCLUSIONS(" [FILE]   - get list of inclusions from FILE"),
         ERROR("Something went wrong");
 
         private final String what;

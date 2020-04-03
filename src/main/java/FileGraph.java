@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FileGraph implements Serializable {
     private final HashSet<String> invalidLinks = new HashSet<>();
@@ -115,6 +116,21 @@ public class FileGraph implements Serializable {
             }
         }
         return result;
+    }
+
+    public List<String> getInclusions(String fileName) {
+        fileName = Utils.resolvePath(fileName);
+        if (!fileIndex.containsKey(fileName)) {
+            return new ArrayList<>();
+        }
+
+        int index = fileIndex.get(fileName);
+        Node node = fileNodes.get(index);
+
+        return node.links.entrySet()
+                .stream().filter(e -> e.getValue() >= 0)
+                .map(e -> e.getKey() + "::" + fileNodes.get(e.getValue()).fileName)
+                .collect(Collectors.toList());
     }
 
     private static class Node implements Serializable {
